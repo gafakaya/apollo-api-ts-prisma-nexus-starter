@@ -3,11 +3,11 @@ import express from "express";
 // import { graphqlUploadExpress } from "graphql-upload";
 // import { context } from "./context";
 import { schema } from "./schema";
-// import { context } from "./context";
+import { context } from "./context";
 
 async function startServer() {
   const server = new ApolloServer({
-    // context,
+    context,
     schema,
   });
 
