@@ -1,3 +1,4 @@
+import {nonNull, stringArg} from "nexus";
 import { extendType } from "nexus/dist/definitions/extendType";
 import { objectType } from "nexus/dist/definitions/objectType";
 
@@ -19,5 +20,27 @@ export const LinkQuery = extendType({
         return context.prisma.link.findMany();
       },
     });
+  },
+});
+
+export const LinkMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+      t.nonNull.field("post", {
+          type: "Link",
+          args: {
+              description: nonNull(stringArg()),
+              url: nonNull(stringArg()),
+          },
+          resolve(_parent, args, context) { 
+              const newLink = context.prisma.link.create({   // 2
+                  data: {
+                      description: args.description,
+                      url: args.url,
+                  },
+              });
+              return newLink;
+          },
+      });
   },
 });
