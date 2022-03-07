@@ -1,4 +1,8 @@
 import { ApolloServer } from "apollo-server-express";
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "apollo-server-core";
 import express from "express";
 // import { graphqlUploadExpress } from "graphql-upload";
 // import { context } from "./context";
@@ -9,6 +13,15 @@ async function startServer() {
   const server = new ApolloServer({
     context,
     schema,
+    plugins: [
+      // Install a landing page plugin based on NODE_ENV
+      process.env.NODE_ENV === "production"
+        ? ApolloServerPluginLandingPageProductionDefault({
+            graphRef: "my-graph-id@my-graph-variant",
+            footer: false,
+          })
+        : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+    ],
   });
 
   await server.start();
